@@ -1,0 +1,135 @@
+-- MySQL dump 10.13  Distrib 8.0.34, for Win64 (x86_64)
+--
+-- Host: localhost    Database: venda
+-- ------------------------------------------------------
+-- Server version	8.1.0
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `notafiscal`
+--
+
+DROP TABLE IF EXISTS `notafiscal`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `notafiscal` (
+  `idNotaFiscal` int NOT NULL,
+  `NumeroNota` int NOT NULL,
+  `DataEmissao` date NOT NULL,
+  `ValorTotal` float NOT NULL,
+  PRIMARY KEY (`idNotaFiscal`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `notafiscal`
+--
+
+LOCK TABLES `notafiscal` WRITE;
+/*!40000 ALTER TABLE `notafiscal` DISABLE KEYS */;
+/*!40000 ALTER TABLE `notafiscal` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `pedido`
+--
+
+DROP TABLE IF EXISTS `pedido`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `pedido` (
+  `idPedido` int NOT NULL AUTO_INCREMENT,
+  `DataPedido` varchar(45) NOT NULL,
+  `CodStatus` int NOT NULL,
+  `ValorPedido` varchar(45) NOT NULL,
+  PRIMARY KEY (`idPedido`),
+  KEY `FK_Status_idx` (`CodStatus`),
+  CONSTRAINT `FK_Status` FOREIGN KEY (`CodStatus`) REFERENCES `statuspedido` (`idStatus`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `pedido`
+--
+
+LOCK TABLES `pedido` WRITE;
+/*!40000 ALTER TABLE `pedido` DISABLE KEYS */;
+/*!40000 ALTER TABLE `pedido` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `statuspedido`
+--
+
+DROP TABLE IF EXISTS `statuspedido`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `statuspedido` (
+  `idStatus` int NOT NULL AUTO_INCREMENT,
+  `StatusPedido` varchar(45) NOT NULL,
+  PRIMARY KEY (`idStatus`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `statuspedido`
+--
+
+LOCK TABLES `statuspedido` WRITE;
+/*!40000 ALTER TABLE `statuspedido` DISABLE KEYS */;
+INSERT INTO `statuspedido` VALUES (1,'Em Processamento'),(2,'Aguardando Pagamento'),(3,'Pagamento Confirmado'),(4,'Em Separação'),(5,'Enviado para Entrega'),(6,'Entregue');
+/*!40000 ALTER TABLE `statuspedido` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `venda`
+--
+
+DROP TABLE IF EXISTS `venda`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `venda` (
+  `idVenda` int NOT NULL AUTO_INCREMENT,
+  `NomeVenda` varchar(45) NOT NULL,
+  `CodPedido` int NOT NULL,
+  `ValorVenda` float NOT NULL,
+  `DataVenda` date NOT NULL,
+  `CodNotaFiscal` int NOT NULL,
+  `ComissaoVendedor` float DEFAULT NULL,
+  PRIMARY KEY (`idVenda`),
+  KEY `FK_Pedido_idx` (`CodPedido`),
+  KEY `FK_NotaFiscal_idx` (`CodNotaFiscal`),
+  CONSTRAINT `FK_NotaFiscal` FOREIGN KEY (`CodNotaFiscal`) REFERENCES `notafiscal` (`idNotaFiscal`),
+  CONSTRAINT `FK_Pedido` FOREIGN KEY (`CodPedido`) REFERENCES `pedido` (`idPedido`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `venda`
+--
+
+LOCK TABLES `venda` WRITE;
+/*!40000 ALTER TABLE `venda` DISABLE KEYS */;
+/*!40000 ALTER TABLE `venda` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2023-11-21  2:42:34
